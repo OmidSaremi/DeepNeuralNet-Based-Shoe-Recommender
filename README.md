@@ -1,3 +1,53 @@
 # DeepNeuralNet-Based-Shoe-Recommender
 
-Roxanne is a web application which makes shoe recommendations from Zappos.com based on user's uploded shoe image using convlutional deep neural nets.
+Roxanne is a web application which makes shoe recommendations from Zappos.com based on user's uploded shoe image using convolutional deep neural nets.
+
+# Data Collection
+
+Data was collected by scraping shoe images from *Zappos.com*. The style of content presentation on *Zappos.com* allowed for scraping shoe images in different style categories and different spatial orientations. The text indicating categories were displayed along the images. The background has already been removed from images. These facts about content presentation on *Zappos.com* simplified scraping and building a labeled dataset for further experimentation.
+Scraping was done using python library Scrapy. It allows for a systematic access to elements on a web page page through *xpath language*.
+
+# Preprocessing
+
+The preprocessing pipeline consisted of the following stages. First input images were resized. The scrapped image were 1920 pixels wide and 1440 pixels high. Using *openCV* Python API, images were resized to 256 pixels while keeping the original aspect ratio intact.
+At next stage, images were cropped down to squares of dimension 224 pixels. This was necessary since the input layer of the convolutional neural net (CNN) used in the modeling accepts a 4-dimensional tensor, a collection of (3, 224, 224) dimensional input image tensors stacked on top of each other, where 3 is the number of channels in the image.
+
+One preprocessing step which improved model performance by a few percent was to filter out noise in the images using a Gaussian filter blur. The filter takes two input parameters, the variances of the gaussian kernel along the two dimensions of the input image. Experimentation showed a filter of size (3, 3) performed best.
+
+Another useful manipulation of the images was to subtract the mean(or median) of the pixel values so that the overall mean intensity of every images is set to zero.
+
+Soon it became clear that the color channel had to be handled separately.
+
+As usual dataset expansion is always useful. In our case it made sense to flip the images around the middle vertically (i.e., it would give another *meaningful* image) but conveniently the mirrored view was already on the website so it only needed to be scrapped.
+
+`Future work on preprocessing:`
+It was found experimentally that background objects in the input image degrades the quality of recommendations. This is to be expected of course. The next step would be to incorporate the `background removal` stage into the pipeline.
+
+# Modeling
+
+Roxanne is an image similarity engine. The idea behind an engine like this is to find a new representation of the input *raster* image (pixels data represented as a tensor), in which similar images are close and any two dissimilar images are separated at least by a pre-set margin given a definition of a distance (we used cosine similarity). This way of thinking about an image similarity engine is the supervised philosophy which we also experimented with. Please refer to `Siamese Architecture` section.
+
+As first step VGG convolutional neural net was used to featurize the images. This `feature` vector is the new good representation of the input image. I picked the output of a 4096 dimensional deeper dense layer. See the following image. VGG was trained on about 1.2 million images belonging to 1000 different classes. VGG's training set included shoe images which made the net a good candidate as featurizer. Here is the architecture of the net:
+[!Image of VGG Architecture]
+(https://github.com/omidsaremi/DeepNeuralNet-Based-Shoe-Recommender/images/vgg_architecture.jpg)
+
+At cod level, the architecture of the VGG convolutional net was recreated in lasagne, the python library for `deep learning`. The weights and biases in the CNN are loaded from pickled pre-trained model. The code can be found [here]()
+
+# Interesting observations about the dataset
+
+It soon became apparent that the quality of recommendations degrades significantly when the dominant characteristic of the input image is its color (say an all-orange shoe input image). In such cases, spatial features like shape were completely ignored in generating recommendations.
+
+So it was interesting to see what the actual prediction of the CNN were on an image of this type. These are the top five labels it predicted.
+As seen clearly none of the top five labels are show related!
+
+To this situation one needs to convert the *RGB* images into *grayscale* and then featurize. And incorporate color information into the pipeline separately. This would be in the form of extending the feature vector to include a color histogram. openCV provides a high level API for computing the color histogram. The influence of the color channel is controlled by assigning a weight to the color portion of the feature vector. Taking the weight as an input from the user is the feature that is being added at the moment.
+
+# Design
+
+Images were featurized using VGG CNN. It proved helpful to write a Theano function which took the input image and the dense layer (featurizer) as input and returned the 4096 dimensional feature vector. The befefit of doing this is to be able to compile the function only once and call the compiled Theano function many times.
+
+The backend storage was MongoDB. It turns out that the 4096 dimensionl feature vector is quite sparse (up to 50% of the elements are zero). I stored a sparse representation of the vector is stored in the collection in MongoDB.  
+
+## Training a Siamese architecture convolutional neural net
+
+Another approach I tried was to train a Siamese architecture. In this approach a new data
