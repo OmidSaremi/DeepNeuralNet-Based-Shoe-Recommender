@@ -44,9 +44,23 @@ To this situation one needs to convert the *RGB* images into *grayscale* and the
 
 # Design
 
-Images were featurized using VGG CNN as a batch job. It proved helpful to write a Theano function which took the input image and the dense layer (featurizer) as input and returned the 4096 dimensional feature vector. The befefit of doing this is to be able to compile the function only once and call the compiled Theano function many times.
+Images were featurized using VGG CNN as a batch job. It proved helpful to write a Theano function which took the input image and the dense layer (featurizer) as input and returned the 4096 dimensional feature vector. This speeds up the featurization process since you compile only once and call the compiled Theano function many times.
 
-The backend storage was MongoDB. The 4096 dimensionl feature vector is sparse (up to 50% of the elements are zero). A sparse representation of the vector is stored in the collection.    
+The backend storage is MongoDB. The features are clustered into a 100 different clusters using MiniBatchKmeans. The centroids associated to each cluster along with a list of images belonging to the corresponding cluster are stored in a Mongo collection.
+
+ The 4096 dimensional feature vectors are sparse (up to 50% of the elements are zero). A sparse representation of each vector is stored in a collection. At start up, Flask app uploads the centroids into memory. The uploaded image is featurized and its cosine similarity is computed against the centroids. The cluster corresponding the most similar centroid is picked and the cosine similarity is further computed with all images within that cluster and then sorted.
+
+ This design speeds up making recommendations. and also only a fraction of features is loaded into memory at start up.
+
+## Scalable design using Apache Spark and S3
+
+when the number of images in the data base increases reading in the collection in memory is not possible. An alternative design, being implemented is to write the features inth images into a S3 bucket. At start up the features are
+loaded up ino an RDD. When a POST request hit the we
+
+
+
+
+
 
 ## Training a Siamese architecture convolutional neural net
 
