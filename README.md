@@ -44,9 +44,9 @@ To this situation one needs to convert the *RGB* images into *grayscale* and the
 
 # Design
 
-Images were featurized using VGG CNN. It proved helpful to write a Theano function which took the input image and the dense layer (featurizer) as input and returned the 4096 dimensional feature vector. The befefit of doing this is to be able to compile the function only once and call the compiled Theano function many times.
+Images were featurized using VGG CNN as a batch job. It proved helpful to write a Theano function which took the input image and the dense layer (featurizer) as input and returned the 4096 dimensional feature vector. The befefit of doing this is to be able to compile the function only once and call the compiled Theano function many times.
 
-The backend storage was MongoDB. It turns out that the 4096 dimensionl feature vector is quite sparse (up to 50% of the elements are zero). I stored a sparse representation of the vector is stored in the collection in MongoDB.  
+The backend storage was MongoDB. The 4096 dimensionl feature vector is sparse (up to 50% of the elements are zero). A sparse representation of the vector is stored in the collection.    
 
 ## Training a Siamese architecture convolutional neural net
 
