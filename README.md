@@ -30,16 +30,13 @@ Roxanne is an image similarity engine. The idea behind an engine like this is to
 As first step VGG convolutional neural net was used to featurize the images. This `feature` vector is the new good representation of the input image. I picked the output of a 4096 dimensional deeper dense layer. VGG was trained on about 1.2 million images belonging to 1000 different classes. VGG's training set included shoe images which made the net a good candidate as featurizer. Here is the architecture of the net:
 ![alt text](https://github.com/omidsaremi/DeepNeuralNet-Based-Shoe-Recommender/images/vgg_architecture.pdf)
 
-At code level, the architecture of the VGG convolutional net was recreated in lasagne, the python library for `deep learning`. The weights and biases in the CNN are loaded from pickled pre-trained model. The code can be found [here]()
+At code level, architecture of the VGG convolutional net was recreated in `lasagne`, the python library for `deep learning`. The weights and biases in the CNN are loaded from the pickled pre-trained model.
 
 # Interesting observations about the dataset
 
-It soon became apparent that the quality of recommendations degrades significantly when the dominant characteristic of the input image is its color (say an all-orange shoe input image). In such cases, spatial features like shape were completely ignored in generating recommendations.
+It soon became apparent that the quality of recommendations degrades significantly when the dominant characteristic of the input image is its color (say an all-orange shoe input image). In such cases, spatial features like shape were mostly overshadowed and ignored in generating recommendations.
 
-So it was interesting to see what the actual prediction of the CNN were on an image of this type. These are the top five labels it predicted.
-As seen clearly none of the top five labels are show related!
-
-To this situation one needs to convert the *RGB* images into *grayscale* and then featurize. And incorporate color information into the pipeline separately. This would be in the form of extending the feature vector to include a color histogram. openCV provides a high level API for computing the color histogram. The influence of the color channel is controlled by assigning a weight to the color portion of the feature vector. Taking the weight as an input from the user is the feature that is being added at the moment.
+To address this situation, one needs to convert the *RGB* images into *grayscale* and then featurize. And only then incorporate color information into the pipeline separately. This would be in the form of extending the feature vector to include a color histogram. openCV provides a high level API for computing color histograms. Influence of the color channel is controlled by assigning a weight to the color portion of the feature vector. Taking the weight as an input from the user is the feature that is being added at the moment.
 
 # Design
 
