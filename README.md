@@ -29,7 +29,7 @@ Roxanne is an image similarity engine. The idea behind an engine like this is to
 
 As first step VGG convolutional neural net was used to featurize the images. This `feature` vector is the new good representation of the input image. I picked the output of a 4096 dimensional deeper dense layer. VGG was trained on about 1.2 million images belonging to 1000 different classes. VGG's training set included shoe images which made the net a good candidate as featurizer. Here is the architecture of the net:
 [!Image of VGG Architecture]
-(https://github.com/omidsaremi/DeepNeuralNet-Based-Shoe-Recommender/images/vgg_architecture.jpg)
+(https://github.com/omidsaremi/DeepNeuralNet-Based-Shoe-Recommender/images/vgg_architecture.pdf)
 
 At code level, the architecture of the VGG convolutional net was recreated in lasagne, the python library for `deep learning`. The weights and biases in the CNN are loaded from pickled pre-trained model. The code can be found [here]()
 
