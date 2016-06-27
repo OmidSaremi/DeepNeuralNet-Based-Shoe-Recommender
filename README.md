@@ -44,7 +44,7 @@ Images were featurized using VGG CNN as a batch job. It proved helpful to write 
 
 The backend storage is MongoDB. The features are clustered into a 100 different clusters using MiniBatchKmeans. The centroids associated to each cluster along with a list of images belonging to the corresponding cluster are stored in a Mongo collection.
 
- The 4096 dimensional feature vectors are sparse (up to 50% of the elements are zero). A sparse representation of each vector is stored in a collection. At start up, Flask app uploads the centroids into memory. The uploaded image is featurized and its cosine similarity is computed against the centroids. The cluster corresponding the most similar centroid is picked and the cosine similarity is further computed with all images within that cluster and then sorted.
+ The 4096 dimensional feature vectors are sparse (up to 50% of the elements are zero). A sparse representation of each vector is stored in a collection (simple hashing). At start up, Flask app uploads the centroids into memory. The uploaded image is featurized and its cosine similarity is computed against the centroids. The cluster corresponding the most similar centroid is picked and the cosine similarity is further computed with all images within that cluster and then sorted.
 
  This design speeds up making recommendations. and also only a fraction of features is loaded into memory at start up.
 
