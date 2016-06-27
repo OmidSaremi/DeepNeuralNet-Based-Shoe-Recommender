@@ -61,3 +61,15 @@ When the number of images in the data base increases, reading in the collection 
 This would be the data flowchart
 
 ![flowchart_Spark](images/flowchart_Spark.png)
+
+# How the app looks like
+
+There is a drag and drop zone on front-end. User can simply drag and drop an image (acceptable extensions are jpg, gif and png). Pressing "Get recommendations!" will generate top-5 recommendations based on spatial characteristics of the input
+
+![screen_shot](images/screen_shot.png)
+
+## Disclaimer
+
+Presence of background objects in the image degrades the quality of recommendations.
+
+If color is the dominant visual element, recommendations might sound confused. See above (interesting observations about the dataset).
