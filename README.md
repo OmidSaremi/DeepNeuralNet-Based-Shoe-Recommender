@@ -18,16 +18,23 @@ Another useful manipulation of the images was to subtract the mean (or median) o
 
 Soon it became clear that the color channel had to be handled separately.
 
-As usual dataset expansion is always useful. In our case it made sense to flip the images around the middle vertically (i.e., it would give another *meaningful* image) but conveniently the mirrored view was already on the website so it only needed to be scrapped.
+As usual dataset expansion is always useful. In our case it made sense to flip the images around the middle vertically (i.e., it would give another *meaningful* image) but conveniently the mirrored view was already on the website so it only needed to be scrapped
+
+![scraping](images/scraping.png)
 
 `Future work on preprocessing:`
 It was found experimentally that background objects in the input image degrades the quality of recommendations. This is to be expected of course. The next step would be to incorporate the `background removal` stage into the pipeline.
 
 # Modeling
 
-Roxanne is an image similarity engine. The idea behind an engine like this is to find a new representation of the input *raster* image (pixels data represented as a tensor), in which similar images are close and any two dissimilar images are separated at least by a pre-set margin given a definition of a distance (we used cosine similarity). There also exists a different way of thinking about an image similarity engine which is supervised in nature. I also experimented with that design. Refer to `Siamese Architecture` section.
+Roxanne is an image similarity engine. The idea behind an engine like this is to find a new representation of the input *raster* image (pixels data represented as a tensor), in which similar images are close and any two dissimilar images are separated at least by a pre-set margin given a definition of a distance (we used cosine similarity)
+
+![idea](images/idea.png)
+
+There also exists a different way of thinking about an image similarity engine which is supervised in nature. I also experimented with that design. Refer to `Siamese Architecture` section.
 
 As first step VGG convolutional neural net was used to featurize the images. This `feature` vector is the new good representation of the input image. I picked the output of a 4096 dimensional deeper dense layer. VGG was trained on about 1.2 million images belonging to 1000 different classes. VGG's training set included shoe images which made the net a good candidate as featurizer. Here is the architecture of the net:
+
 ![vgg_architecture](images/vgg_architecture.png "VGG Architecture")
 
 At code level, architecture of the VGG convolutional net was recreated in `lasagne`, the python library for `deep learning`. The weights and biases in the CNN are loaded from the pickled pre-trained model.
@@ -50,5 +57,7 @@ The backend storage is MongoDB. The features are clustered into a 100 different 
 
 ## Scalable design using Apache Spark and S3
 
-when the number of images in the data base increases reading in the collection in memory is not possible. An alternative design, being implemented is to write the features inth images into a S3 bucket. At start up the features are
-loaded up ino an RDD. When a file is uploaded
+When the number of images in the data base increases, reading in the collection into the memory is not possible. An alternative design, currently being implemented, is to write the image features into a S3 bucket. At start up, the features are loaded up from S3 into an RDD. When an image is uploaded through the front-end, cosine-similarities between the input and the cluster centroids (and inside the most similar cluster) are calculated as a MapReduce job on the Spark cluster.
+This would be the data flowchart
+
+![flowchart_Spark](images/flowchart_Spark.png)
