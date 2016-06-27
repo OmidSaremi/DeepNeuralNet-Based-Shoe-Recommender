@@ -14,7 +14,7 @@ At next stage, images were cropped down to squares of dimension 224 pixels. This
 
 One preprocessing step which improved model performance by a few percent was to filter out noise in the images using a Gaussian filter blur. The filter takes two input parameters, the variances of the gaussian kernel along the two dimensions of the input image. Experimentation showed a filter of size (3, 3) performed best.
 
-Another useful manipulation of the images was to subtract the mean(or median) of the pixel values so that the overall mean intensity of every images is set to zero.
+Another useful manipulation of the images was to subtract the mean (or median) of the pixel values so that the overall mean intensity of every images is set to zero.
 
 Soon it became clear that the color channel had to be handled separately.
 
@@ -25,13 +25,13 @@ It was found experimentally that background objects in the input image degrades 
 
 # Modeling
 
-Roxanne is an image similarity engine. The idea behind an engine like this is to find a new representation of the input *raster* image (pixels data represented as a tensor), in which similar images are close and any two dissimilar images are separated at least by a pre-set margin given a definition of a distance (we used cosine similarity). This way of thinking about an image similarity engine is the supervised philosophy which we also experimented with. Please refer to `Siamese Architecture` section.
+Roxanne is an image similarity engine. The idea behind an engine like this is to find a new representation of the input *raster* image (pixels data represented as a tensor), in which similar images are close and any two dissimilar images are separated at least by a pre-set margin given a definition of a distance (we used cosine similarity). There also exists a different way of thinking about an image similarity engine which is supervised in nature. I also experimented with that design. Refer to `Siamese Architecture` section.
 
-As first step VGG convolutional neural net was used to featurize the images. This `feature` vector is the new good representation of the input image. I picked the output of a 4096 dimensional deeper dense layer. See the following image. VGG was trained on about 1.2 million images belonging to 1000 different classes. VGG's training set included shoe images which made the net a good candidate as featurizer. Here is the architecture of the net:
+As first step VGG convolutional neural net was used to featurize the images. This `feature` vector is the new good representation of the input image. I picked the output of a 4096 dimensional deeper dense layer. VGG was trained on about 1.2 million images belonging to 1000 different classes. VGG's training set included shoe images which made the net a good candidate as featurizer. Here is the architecture of the net:
 [!Image of VGG Architecture]
 (https://github.com/omidsaremi/DeepNeuralNet-Based-Shoe-Recommender/images/vgg_architecture.jpg)
 
-At cod level, the architecture of the VGG convolutional net was recreated in lasagne, the python library for `deep learning`. The weights and biases in the CNN are loaded from pickled pre-trained model. The code can be found [here]()
+At code level, the architecture of the VGG convolutional net was recreated in lasagne, the python library for `deep learning`. The weights and biases in the CNN are loaded from pickled pre-trained model. The code can be found [here]()
 
 # Interesting observations about the dataset
 
@@ -55,13 +55,4 @@ The backend storage is MongoDB. The features are clustered into a 100 different 
 ## Scalable design using Apache Spark and S3
 
 when the number of images in the data base increases reading in the collection in memory is not possible. An alternative design, being implemented is to write the features inth images into a S3 bucket. At start up the features are
-loaded up ino an RDD. When a POST request hit the we
-
-
-
-
-
-
-## Training a Siamese architecture convolutional neural net
-
-Another approach I tried was to train a Siamese architecture. In this approach a new data
+loaded up ino an RDD. When a file is uploaded
