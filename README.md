@@ -64,12 +64,10 @@ This would be the data flowchart
 
 # How the app looks like
 
-There is a drag and drop zone on front-end. User can simply drag and drop an image (acceptable extensions are jpg, gif and png). Pressing "Get recommendations!" will generate top-5 recommendations based on spatial characteristics of the input
+There is a drag and drop zone on front-end. User can simply drag and drop an image (acceptable extensions are jpg, gif and png). Wait for the progress bar to get completely filled and a check-mark to appear on the thumbnail. Pressing "Get recommendations!" will generate top-5 recommendations based on spatial characteristics of the input
 
 ![screen_shot](images/screen_shot.png)
 
 ## Disclaimer
 
-Presence of background objects in the image degrades the quality of recommendations.
-
-If color is the dominant visual element, recommendations might sound confused. See above (interesting observations about the dataset).
+Presence of background objects in the image degrades the quality of recommendations. Similarly, if color is the dominant visual element, recommendations might feel confused. See above (interesting observations about the dataset).
