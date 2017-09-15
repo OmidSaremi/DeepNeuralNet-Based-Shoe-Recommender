@@ -8,7 +8,6 @@ import os
 import time
 
 class Dataset(object):
-
     def __init__(self, data_frame):
         self.df = data_frame
         self.col_full_df = data_frame.columns
@@ -40,7 +39,6 @@ class Dataset(object):
 
     def get_class_by_image_id(self, image_id):
         return self.subset_df[self.subset_df['CID']==image_id]['class'].values[0]
-
 
 class Preprocessing(object):
 

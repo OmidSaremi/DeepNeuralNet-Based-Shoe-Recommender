@@ -1,4 +1,3 @@
-
 import numpy as np
 from building_dataset import *
 from ConvNeuralNet import ConvNeuralNet
@@ -113,7 +112,6 @@ def load_data(siamese_dataset, siamese_dataset_valid):
         )
 
 def build_model(input_width, input_height, batch_size=BATCH_SIZE):
-
     l_input = lasagne.layers.InputLayer(
         shape=(None, 6, input_width, input_height),
     )
@@ -150,7 +148,6 @@ def create_iter_functions(output_layer, learning_rate=LEARNING_RATE, momentum=MO
     return dict(train=iter_train, valid=iter_valid)
 
 def train(iter_funcs, dataset, batch_size=BATCH_SIZE):
-
     num_batches_train = dataset['num_examples_train']/batch_size
     num_batches_valid = dataset['num_examples_valid']/batch_size
     batch_train_losses = []
@@ -172,7 +169,6 @@ def train(iter_funcs, dataset, batch_size=BATCH_SIZE):
     return {'train_loss': avg_train_loss, 'valid_loss': avg_valid_loss}
 
 def main(num_epochs):
-
     print("Loading data ...")
     dataset = load_data(siamese_dataset_train, siamese_dataset_valid)
 

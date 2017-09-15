@@ -11,7 +11,6 @@ import time
 
 # The VGG convolutional neural net architecture and pretrained weights
 class ConvNeuralNet(object):
-
     def __init__(self, pickle_path, image_upload_folder):
         self.neural_net = {}
         self.output_layer = None
