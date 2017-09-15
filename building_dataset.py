@@ -7,7 +7,6 @@ import cv2
 import os
 import time
 
-
 class Dataset(object):
 
     def __init__(self, data_frame):

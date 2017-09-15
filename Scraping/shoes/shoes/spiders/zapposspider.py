@@ -5,7 +5,6 @@ import scrapy
 starting_url = "http://www.zappos.com/mens-shoes?pf_rd_r=0625X0PC4JBF736ZBYJ0&pf_rd_p=c6b62617-0229-4d70-9725-06e887895ddf"
 X = ["http://www.zappos.com/men-oxfords/CK_XARC31wHAAQLiAgMYAQI.zso?s=goliveRecentSalesStyle/desc/&pf_rd_r=0AZR7F1Z73YSNT2JXRVJ&pf_rd_p=7ab7e484-b6f3-4147-a37a-0149a357dd47", "http://www.zappos.com/mens-sandals~37?s=goliveRecentSalesStyle/desc/&pf_rd_r=0AZR7F1Z73YSNT2JXRVJ&pf_rd_p=7ab7e484-b6f3-4147-a37a-0149a357dd47"]
 
-
 class ZapposSpider(scrapy.Spider):
     name = "zapposspider"
     # Shoes page
