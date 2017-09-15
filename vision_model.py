@@ -12,7 +12,6 @@ from collections import Counter
 import time
 
 # Using hand-crafted features (SIFT) for image classification
-
 NUM_SAMPLES = 500
 VISUAL_VOCAB = 200
 

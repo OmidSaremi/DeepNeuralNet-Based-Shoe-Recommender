@@ -4,7 +4,6 @@ from flask import Flask, request, redirect, url_for, session
 from werkzeug import secure_filename
 import cPickle
 import sys
-sys.path.append("..")
 import time
 import building_dataset
 import pandas as pd
@@ -12,6 +11,7 @@ from pymongo import MongoClient
 import my_util
 import ConvNeuralNet
 
+sys.path.append("..")
 cnn = ConvNeuralNet.ConvNeuralNet()
 cnn.load()
 
